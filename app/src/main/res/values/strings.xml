@@ -23,8 +23,9 @@
     <!--It's good to keep this short, so your launcher icon isn't displayed with "The greatest Wea"-->
     <!--or something similar.-->
     <string name="app_name">Sunshine</string>
-
-
+    <!-- String for refresh button -->
+    <string name="refresh_button_title">Refresh</string>
+    <string name="error_message">How embarrassing! There\'s been an error.</string>
     <!-- - - - - - - - - - - - - -->
     <!--Used by SunshineDateUtils-->
     <!-- - - - - - - - - - - - - -->
@@ -40,8 +41,7 @@
         <xliff:g id="month">%1$s</xliff:g>, <xliff:g id="day">%2$s</xliff:g>
     </string>
 
-    <!-- String for refresh button -->
-    <string name="refresh_button_title">Refresh</string>
+
 
 
     <!-- - - - - - - - - - - - - - - -->
