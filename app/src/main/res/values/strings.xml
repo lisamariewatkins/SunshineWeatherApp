@@ -40,6 +40,9 @@
         <xliff:g id="month">%1$s</xliff:g>, <xliff:g id="day">%2$s</xliff:g>
     </string>
 
+    <!-- String for refresh button -->
+    <string name="refresh_button_title">Refresh</string>
+
 
     <!-- - - - - - - - - - - - - - - -->
     <!-- Used by SunshineWeatherUtils-->
