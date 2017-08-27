@@ -29,16 +29,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" " />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:id="@+id/error_message"
-            android:text="@string/error_message"/>
-        <ProgressBar
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:visibility="invisible"
-            android:id="@+id/loading_progress"/>
+
     </ScrollView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:padding="16dp"
+        android:textSize="20sp"
+        android:id="@+id/error_message"
+        android:text="@string/error_message"/>
+
+    <ProgressBar
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        android:id="@+id/loading_progress"/>
 </FrameLayout>
