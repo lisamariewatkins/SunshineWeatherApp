@@ -26,6 +26,9 @@
     <!-- String for refresh button -->
     <string name="refresh_button_title">Refresh</string>
     <string name="error_message">How embarrassing! There\'s been an error.</string>
+    <string name="action_map">Map Location</string>
+    <string name="action_share">Share</string>
+
     <!-- - - - - - - - - - - - - -->
     <!--Used by SunshineDateUtils-->
     <!-- - - - - - - - - - - - - -->
