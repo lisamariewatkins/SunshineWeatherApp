@@ -35,6 +35,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
         return new ForecastViewHolder(view);
     }
 
+    // populates each item with data
     @Override
     public void onBindViewHolder(ForecastViewHolder holder, int position) {
         String weatherForThisDay = mWeatherData[position];
