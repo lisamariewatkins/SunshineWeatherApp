@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lisamwatkins.sunshine.data.SunshinePreferences;
 import com.example.lisamwatkins.sunshine.utilities.NetworkUtils;
@@ -21,7 +22,7 @@ import org.w3c.dom.Text;
 
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ForecastAdapter.ForecastAdapterOnClickHandler {
     private TextView mErrorMessageTextView;
     private ProgressBar mLoadingProgressBar;
     private RecyclerView mForecastRecyclerView;
@@ -40,10 +41,15 @@ public class MainActivity extends AppCompatActivity {
         mForecastRecyclerView.setLayoutManager(layoutManager);
         mForecastRecyclerView.setHasFixedSize(true);
 
-        mForecastAdapter = new ForecastAdapter();
+        mForecastAdapter = new ForecastAdapter(this);
         mForecastRecyclerView.setAdapter(mForecastAdapter);
 
         loadWeatherData();
+    }
+
+    @Override
+    public void onClick(String weatherForDay) {
+        Toast.makeText(this, weatherForDay, Toast.LENGTH_SHORT).show();
     }
 
     private void loadWeatherData(){
