@@ -143,5 +143,6 @@
     <!-- - - - - - - - - - - - - - -->
     <!--Used by SunshinePreferences-->
     <!-- - - - - - - - - - - - - - -->
+    <string name="action_settings">Settings</string>
     <!--NONE-->
 </resources>

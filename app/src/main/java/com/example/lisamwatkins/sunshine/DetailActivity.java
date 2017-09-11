@@ -35,6 +35,16 @@ public class DetailActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_settings){
+            Intent intentToStartSettings = new Intent(this, SettingsActivity.class);
+            startActivity(intentToStartSettings);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public Intent createShareForecastIntent(){
         Intent shareIntent = ShareCompat.IntentBuilder.from(this)
                 .setType("text/plain")

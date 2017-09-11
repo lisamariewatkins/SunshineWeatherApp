@@ -185,6 +185,12 @@ public class MainActivity extends AppCompatActivity implements
             openLocationInMap();
             return true;
         }
+
+        if(id == R.id.action_settings){
+            Intent intentToStartSettings = new Intent(this, SettingsActivity.class);
+            startActivity(intentToStartSettings);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }
