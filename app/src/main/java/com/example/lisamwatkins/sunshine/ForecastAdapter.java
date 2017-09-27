@@ -23,7 +23,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
     private Cursor mCursor;
     // Defines listener
     public interface ForecastAdapterOnClickHandler{
-        public void onClick(String weatherForDay);
+        public void onClick(Long weatherForDay);
     }
 
     public ForecastAdapter(ForecastAdapterOnClickHandler clickHandler, @NonNull Context context){
@@ -80,8 +80,11 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
 
         @Override
         public void onClick(View view) {
-            String weatherForToday = mWeatherTextView.getText().toString();
-            mClickHandler.onClick(weatherForToday);
+            int adapterPosition = getAdapterPosition();
+            mCursor.moveToPosition(adapterPosition);
+
+            long dateInMillis = mCursor.getLong(MainActivity.INDEX_WEATHER_DATE);
+            mClickHandler.onClick(dateInMillis);
         }
     }
 }

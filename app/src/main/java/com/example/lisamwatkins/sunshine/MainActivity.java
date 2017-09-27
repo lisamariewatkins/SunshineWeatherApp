@@ -23,30 +23,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.lisamwatkins.sunshine.data.SunshinePreferences;
-import com.example.lisamwatkins.sunshine.utilities.NetworkUtils;
-import com.example.lisamwatkins.sunshine.utilities.OpenWeatherJsonUtils;
-import com.example.lisamwatkins.sunshine.utilities.SunshineWeatherUtils;
 import com.example.lisamwatkins.sunshine.data.WeatherContract;
-
-import org.w3c.dom.Text;
-
-import java.net.URL;
+import com.example.lisamwatkins.sunshine.utilities.FakeDataUtils;
 
 public class MainActivity extends AppCompatActivity implements
         ForecastAdapter.ForecastAdapterOnClickHandler,
         LoaderManager.LoaderCallbacks<Cursor>
         {
+    private final String TAG = MainActivity.class.getSimpleName();
 
     private int mPosition = RecyclerView.NO_POSITION;
-    private ProgressBar mLoadingProgressBar;
     private RecyclerView mForecastRecyclerView;
     private ForecastAdapter mForecastAdapter;
-    private String TAG = MainActivity.class.getSimpleName();
-    private static final int LOADER_ID = 0;
+
+    private ProgressBar mLoadingProgressBar;
+
+    private static final int LOADER_ID = 44;
 
     public static final String[] MAIN_FORECAST_PROJECTION = {
             WeatherContract.WeatherEntry.COLUMN_DATE,
@@ -64,12 +58,16 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
+        getSupportActionBar().setElevation(0f);
 
+        FakeDataUtils.insertFakeData(this);
 
         mLoadingProgressBar = (ProgressBar) findViewById(R.id.loading_progress);
         mForecastRecyclerView = (RecyclerView) findViewById(R.id.rv_forecast);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,
+                false);
+
         mForecastRecyclerView.setLayoutManager(layoutManager);
         mForecastRecyclerView.setHasFixedSize(true);
 
@@ -78,13 +76,7 @@ public class MainActivity extends AppCompatActivity implements
 
         showLoading();
 
-        int loaderId = LOADER_ID;
-
-        LoaderManager.LoaderCallbacks<Cursor> callbacks = MainActivity.this;
-
-        Bundle bundleForLoader = null;
-
-        getSupportLoaderManager().initLoader(loaderId, bundleForLoader, callbacks);
+        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     @Override
@@ -140,19 +132,18 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+
     @Override
-    public void onClick(String weatherForDay) {
-        Class targetActivity = DetailActivity.class;
-        Context context = this;
-        Intent intentToStartDetailActivity = new Intent(context, targetActivity);
-
-        intentToStartDetailActivity.putExtra(Intent.EXTRA_TEXT, weatherForDay);
-
-        startActivity(intentToStartDetailActivity);
+    public void onClick(Long date) {
+        Intent weatherDetailIntent = new Intent(MainActivity.this, DetailActivity.class);
+        Uri uriForDateClicked = WeatherContract.WeatherEntry.buildWeatherUriWithDate(date);
+        weatherDetailIntent.setData(uriForDateClicked);
+        startActivity(weatherDetailIntent);
     }
 
     private void showWeatherDataView(){
         mForecastRecyclerView.setVisibility(View.VISIBLE);
+        mLoadingProgressBar.setVisibility(View.INVISIBLE);
     }
 
 
@@ -180,4 +171,5 @@ public class MainActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-}
+
+        }
