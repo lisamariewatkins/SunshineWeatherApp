@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,11 @@ import com.example.lisamwatkins.sunshine.utilities.SunshineWeatherUtils;
  */
 
 public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastViewHolder> {
+    private static final int VIEW_TYPE_TODAY = 0;
+    private static final int VIEW_TYPE_FUTURE_DAY = 1;
+
+    private boolean mUseTodayLayout;
+
     private ForecastAdapterOnClickHandler mClickHandler;
     private Context mContext;
     private Cursor mCursor;
@@ -30,11 +36,22 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
     public ForecastAdapter(ForecastAdapterOnClickHandler clickHandler, @NonNull Context context){
         mClickHandler = clickHandler;
         mContext = context;
+        mUseTodayLayout = context.getResources().getBoolean(R.bool.use_today_layout);
     }
 
     @Override
     public ForecastViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.weather_list_item, viewGroup, false);
+        View view;
+        if(viewType == VIEW_TYPE_TODAY){
+            view = LayoutInflater.from(mContext).inflate(R.layout.list_item_forecast_today, viewGroup, false);
+        }
+        else if(viewType == VIEW_TYPE_FUTURE_DAY){
+            view = LayoutInflater.from(mContext).inflate(R.layout.weather_list_item, viewGroup, false);
+        }
+        else{
+            throw new IllegalArgumentException("View does not exist");
+        }
+
         view.setFocusable(true);
 
         return new ForecastViewHolder(view);
@@ -51,7 +68,15 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
 
         int weatherId = mCursor.getInt(MainActivity.INDEX_WEATHER_CONDITION_ID);
         int weatherImageId;
-        weatherImageId = SunshineWeatherUtils.getSmallArtResourceIdForWeatherCondition(weatherId);
+        if(holder.getItemViewType() == VIEW_TYPE_TODAY){
+            weatherImageId = SunshineWeatherUtils.getLargeArtResourceIdForWeatherCondition(weatherId);
+        }
+        else if (holder.getItemViewType() == VIEW_TYPE_FUTURE_DAY){
+            weatherImageId = SunshineWeatherUtils.getSmallArtResourceIdForWeatherCondition(weatherId);
+        }
+        else{
+            throw new IllegalArgumentException("View does not exist");
+        }
         holder.iconView.setImageResource(weatherImageId);
 
         String description = SunshineWeatherUtils.getStringForWeatherCondition(mContext, weatherId);
@@ -71,6 +96,16 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
     public int getItemCount() {
         if(mCursor == null) return 0;
         return mCursor.getCount();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(mUseTodayLayout == true && position == 0){
+            return VIEW_TYPE_TODAY;
+        }
+        else{
+            return VIEW_TYPE_FUTURE_DAY;
+        }
     }
 
     public void swapCursors(Cursor cursor){
