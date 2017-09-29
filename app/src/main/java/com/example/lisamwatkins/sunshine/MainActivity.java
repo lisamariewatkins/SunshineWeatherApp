@@ -26,6 +26,7 @@ import android.widget.ProgressBar;
 
 import com.example.lisamwatkins.sunshine.data.SunshinePreferences;
 import com.example.lisamwatkins.sunshine.data.WeatherContract;
+import com.example.lisamwatkins.sunshine.sync.SunshineSyncUtils;
 import com.example.lisamwatkins.sunshine.utilities.FakeDataUtils;
 
 public class MainActivity extends AppCompatActivity implements
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_forecast);
         getSupportActionBar().setElevation(0f);
 
-        FakeDataUtils.insertFakeData(this);
+        SunshineSyncUtils.initialize(this);
 
         mLoadingProgressBar = (ProgressBar) findViewById(R.id.loading_progress);
         mForecastRecyclerView = (RecyclerView) findViewById(R.id.rv_forecast);

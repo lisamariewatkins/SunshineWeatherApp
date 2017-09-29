@@ -1,5 +1,6 @@
 package com.example.lisamwatkins.sunshine;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.preference.CheckBoxPreference;
@@ -7,6 +8,10 @@ import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
+
+import com.example.lisamwatkins.sunshine.data.SunshinePreferences;
+import com.example.lisamwatkins.sunshine.data.WeatherContract;
+import com.example.lisamwatkins.sunshine.sync.SunshineSyncUtils;
 
 import java.util.List;
 
@@ -16,6 +21,7 @@ import java.util.List;
 
 public class SettingsFragment extends PreferenceFragmentCompat
         implements SharedPreferences.OnSharedPreferenceChangeListener{
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.pref_sunshine);
@@ -35,10 +41,13 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Preference pref = findPreference(key);
-        if(pref != null && !(pref instanceof CheckBoxPreference)){
-            String value = sharedPreferences.getString(pref.getKey(), "");
-            setPreferenceSummary(pref, value);
+        Activity activity = getActivity();
+
+        if(key.equals(getString(R.string.pref_location_key))) {
+            SunshinePreferences.resetLocationCoordinates(activity);
+            SunshineSyncUtils.startImmediateSync(activity);
+        } else if(key.equals(getString(R.string.pref_units_key))){
+            activity.getContentResolver().notifyChange(WeatherContract.WeatherEntry.CONTENT_URI, null);
         }
     }
 
