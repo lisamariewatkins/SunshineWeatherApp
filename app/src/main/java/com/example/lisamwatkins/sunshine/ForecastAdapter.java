@@ -41,17 +41,19 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
 
     @Override
     public ForecastViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view;
+        int layoutId;
+
         if(viewType == VIEW_TYPE_TODAY){
-            view = LayoutInflater.from(mContext).inflate(R.layout.list_item_forecast_today, viewGroup, false);
+            layoutId = R.layout.list_item_forecast_today;
         }
         else if(viewType == VIEW_TYPE_FUTURE_DAY){
-            view = LayoutInflater.from(mContext).inflate(R.layout.weather_list_item, viewGroup, false);
+            layoutId = R.layout.weather_list_item;
         }
         else{
             throw new IllegalArgumentException("View does not exist");
         }
 
+        View view = LayoutInflater.from(mContext).inflate(layoutId, viewGroup, false);
         view.setFocusable(true);
 
         return new ForecastViewHolder(view);
@@ -62,16 +64,18 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
     public void onBindViewHolder(ForecastViewHolder holder, int position) {
         mCursor.moveToPosition(position);
 
+        int viewType = getItemViewType(position);
+
         long dateInMillis = mCursor.getLong(MainActivity.INDEX_WEATHER_DATE);
         String dateString = SunshineDateUtils.getFriendlyDateString(mContext, dateInMillis, false);
         holder.dateView.setText(dateString);
 
         int weatherId = mCursor.getInt(MainActivity.INDEX_WEATHER_CONDITION_ID);
         int weatherImageId;
-        if(holder.getItemViewType() == VIEW_TYPE_TODAY){
+        if(viewType == VIEW_TYPE_TODAY){
             weatherImageId = SunshineWeatherUtils.getLargeArtResourceIdForWeatherCondition(weatherId);
         }
-        else if (holder.getItemViewType() == VIEW_TYPE_FUTURE_DAY){
+        else if (viewType == VIEW_TYPE_FUTURE_DAY){
             weatherImageId = SunshineWeatherUtils.getSmallArtResourceIdForWeatherCondition(weatherId);
         }
         else{

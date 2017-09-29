@@ -2,6 +2,7 @@ package com.example.lisamwatkins.sunshine;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.Image;
 import android.net.Uri;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.ShareCompat;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.lisamwatkins.sunshine.data.WeatherContract;
@@ -31,6 +33,7 @@ public class DetailActivity extends AppCompatActivity
     private TextView mHumidityTextView;
     private TextView mWindTextView;
     private TextView mPressureTextView;
+    private ImageView mWeatherIcon;
 
     private Uri mUri;
 
@@ -63,11 +66,12 @@ public class DetailActivity extends AppCompatActivity
 
         mDateTextView = (TextView) findViewById(R.id.tv_date);
         mDescriptionTextView = (TextView) findViewById(R.id.tv_description);
-        mHighTextView = (TextView) findViewById(R.id.tv_max_temp);
-        mLowTextView = (TextView) findViewById(R.id.tv_min_temp);
-        mHumidityTextView = (TextView) findViewById(R.id.tv_humidity);
-        mWindTextView = (TextView) findViewById(R.id.tv_wind_speed);
-        mPressureTextView = (TextView) findViewById(R.id.tv_pressure);
+        mHighTextView = (TextView) findViewById(R.id.high_temperature);
+        mLowTextView = (TextView) findViewById(R.id.low_temperature);
+        mHumidityTextView = (TextView) findViewById(R.id.textViewHumidity);
+        mWindTextView = (TextView) findViewById(R.id.textViewWind);
+        mPressureTextView = (TextView) findViewById(R.id.textViewPressure);
+        mWeatherIcon = (ImageView) findViewById(R.id.weather_icon);
 
         Intent intentThatStartedThisActivity = getIntent();
 
@@ -131,11 +135,17 @@ public class DetailActivity extends AppCompatActivity
 
         if(!cursorHasValidData) return;
 
+        int weatherId = data.getInt(INDEX_WEATHER_CONDITION_ID);
+
+        int weatherImageId = SunshineWeatherUtils.getLargeArtResourceIdForWeatherCondition(weatherId);
+
+        mWeatherIcon.setImageResource(weatherImageId);
+
         long localDateMidnightGmt = data.getLong(INDEX_WEATHER_DATE);
         String dateText = SunshineDateUtils.getFriendlyDateString(this, localDateMidnightGmt, true);
         mDateTextView.setText(dateText);
 
-        int weatherId = data.getInt(INDEX_WEATHER_CONDITION_ID);
+
         String description = SunshineWeatherUtils.getStringForWeatherCondition(this, weatherId);
         mDescriptionTextView.setText(description);
 
