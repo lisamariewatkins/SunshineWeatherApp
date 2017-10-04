@@ -2,7 +2,7 @@ package com.example.lisamwatkins.sunshine;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.Image;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.ShareCompat;
